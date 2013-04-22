@@ -36,7 +36,7 @@ to a private fileserver, and return 404 for any other paths:
 """
 
 __ver_major__ = 0
-__ver_minor__ = 1
+__ver_minor__ = 2
 __ver_patch__ = 1
 __ver_sub__ = ""
 __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
@@ -146,14 +146,14 @@ class Dispatcher:
     def sendRequest(self,req,server):
         for ln in req:
           server.write(ln)
-        
+
     @uspawn
     def processResponses(self):
         if self._processingResps:
           return
         self._processingResps = True
         while self._responses:
-          resp = self._responses.pop(0)        
+          resp = self._responses.pop(0)
           for ln in resp:
             try:
               self.client.write(ln)
