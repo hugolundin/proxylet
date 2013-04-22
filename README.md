@@ -1,5 +1,9 @@
+proxylet:  lightweight HTTP reverse proxy built on eventlet
+===
 
-  proxylet:  lightweight HTTP reverse proxy built on eventlet
+Originally written by: Ryan Kelly <https://github.com/rfk> (2007)
+Updated by: Marcus Breese (2013)
+
 
 This module implements a lightweight reverse proxy for HTTP, using non-blocking
 IO based on the eventlet module.  It aims to do as little as possible while
@@ -9,7 +13,7 @@ keep-alive.
 Basic operation is via the 'serve' function, which will bind to the
 specified host and port and start accepting incoming HTTP requests:
 
-  proxylet.serve(host,port,mapper)
+    proxylet.serve(host,port,mapper)
 
 Here 'mapper' is a function taking a proxylet.streams.HTTPRequest object,
 and returning either None (for '404 Not Found') or a 3-tuple giving the
@@ -24,11 +28,26 @@ As an example of the available functionality, this mapping function will
 proxy requests to /svn to a private subversion server, requests to /files
 to a private fileserver, and return 404 for any other paths:
 
-  def mapper(req):
-    svn = SVNRelocator("http://www.example.com/svn","http://svn.example.com/")
-    if svn.matchesLocal(req.reqURI):
-      return svn.mapping  # contains the (host,port,rewriter) tuple
-    if req.reqURI.startswith("/files/"):
-      return ("files.example.com",80,None)
-    return None
+Example code to get this running...
 
+    def _demo_mapper(req):
+        """Simple demonstration mapper function, also for testing purposes.
+        Proxies the following:
+            * /rfk/      :   my personal website
+            * /g/        :   google website
+            * /morph/    :   morph SVN repo
+        """
+        from relocate import DrupalRelocator, DAVRelocator, SVNRelocator, Relocator
+        rfk = Relocator("http://localhost:8080/rfk","http://www.rfk.id.au/")
+        goog = Relocator("http://localhost:8080/g","http://www.google.com/")
+        svn = SVNRelocator("http://localhost:8080/svn","http://sphericalmatrix.com/svn/morph")
+        if svn.matchesLocal(req.reqURI):
+          return svn.mapping
+        if rfk.matchesLocal(req.reqURI):
+          return rfk.mapping
+        if goog.matchesLocal(req.reqURI):
+          return goog.mapping
+        return None
+
+    def _demo():
+        serve('',8080,_demo_mapper)
