@@ -28,7 +28,7 @@ setup(name='proxylet',
       keywords = "HTTP reverse proxy",
       author = "Ryan Kelly",
       author_email = "ryan@rfk.id.au",
-      packages = ['proxylet2'],
+      packages = ['proxylet'],
       license = "PSF",
       install_requires = [
         'Paste','eventlet'
