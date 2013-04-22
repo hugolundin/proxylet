@@ -13,15 +13,13 @@ XMLRewriter.
 from paste import httpheaders as hdr
 from xml.parsers import expat
 
-from eventlet.greenio import GreenFile
-
 
 class StreamWrapper(object):
     """Base class for wrapping of streams."""
 
     def __init__(self,stream):
         if not hasattr(stream,"readline") and hasattr(stream,"recv"):
-            stream = GreenFile(stream)
+            stream = stream.makefile('rb', 0)
         self.stream = stream
 
     def readline(self,size=None):
@@ -272,7 +270,7 @@ class HTTPRewriter(StreamWrapper):
             hdr.CONTENT_LENGTH.update(self.stream.headers,newCL)
         for ln in self.stream:
           yield ln
-        
+
 
 class XMLRewriter(StreamWrapper):
     """Rewrite a stream containing XML.
@@ -280,7 +278,7 @@ class XMLRewriter(StreamWrapper):
     This class is used to read from a stream yielding chunks of
     XML content, apply some transformations to the data, and send
     the new XML out as a stream
- 
+
     It supports only a single rewriting function self.rewrite. To
     indicate what parts of the document to rewrite, set entries
     corresponding to tag names in self.rw_content{} and entries
@@ -341,7 +339,7 @@ class XMLRewriter(StreamWrapper):
         # Start collecting content if we need to rewrite it
         if self.rw_content.get(name):
             self._content = ""
-        # Rewrite any attributes 
+        # Rewrite any attributes
         arw = self.rw_attrs.get(name,{})
         for a in arw:
             try:

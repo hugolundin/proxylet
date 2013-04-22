@@ -6,10 +6,7 @@
 #
 
 
-import ez_setup
-ez_setup.use_setuptools()
-
-from setuptools import setup, find_packages
+from distutils.core import setup
 
 try:
     import proxylet
@@ -31,7 +28,7 @@ setup(name='proxylet',
       keywords = "HTTP reverse proxy",
       author = "Ryan Kelly",
       author_email = "ryan@rfk.id.au",
-      packages = find_packages(),
+      packages = ['proxylet2'],
       license = "PSF",
       install_requires = [
         'Paste','eventlet'
