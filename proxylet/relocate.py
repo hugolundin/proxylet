@@ -49,7 +49,7 @@ class UrlInfo(object):
           url = url[0:-1]
         info = urlparse(url)
         self.url = url
-        self.path = info.path or "/"
+        self.path = info.path or ""
         self.baseurl = "%s://%s" % (info.scheme,info.netloc)
         self.port = info.port
         self.host = info.hostname
