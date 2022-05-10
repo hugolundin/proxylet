@@ -26,14 +26,14 @@ to /svn/ to a backend SVN server:
 """
 
 from paste import httpheaders as hdr
-from urlparse import *
+from urllib.parse import *
 import re
 try:
-  from cStringIO import StringIO
+  from io import StringIO
 except ImportError:
-  from StringIO import StringIO
+  from io import StringIO
 
-from streams import HTTPRewriter, XMLRewriter
+from .streams import HTTPRewriter, XMLRewriter
 
 ## Make a "Destination' header handler, since we
 ## need to rewrite it in WebDAV requests.

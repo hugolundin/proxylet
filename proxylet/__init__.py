@@ -47,7 +47,7 @@ import sys
 import traceback
 import socket
 from eventlet import api as evtapi
-from streams import *
+from .streams import *
 
 
 def uspawn(func):
@@ -115,7 +115,7 @@ class Dispatcher:
         except:
           (_,ex,tb) = sys.exc_info()
           traceback.print_tb(tb)
-          print ex
+          print(ex)
         # Ensure all responses have been written, before closing
         self.processResponses()
 
@@ -210,7 +210,7 @@ def _demo_mapper(req):
         * /g/        :   google website
         * /morph/    :   morph SVN repo
     """
-    from relocate import DrupalRelocator, DAVRelocator, SVNRelocator, Relocator
+    from .relocate import DrupalRelocator, DAVRelocator, SVNRelocator, Relocator
     rfk = Relocator("http://localhost:8080/rfk","http://www.rfk.id.au/")
     goog = Relocator("http://localhost:8080/g","http://www.google.com/")
     svn = SVNRelocator("http://localhost:8080/svn","http://sphericalmatrix.com/svn/morph")

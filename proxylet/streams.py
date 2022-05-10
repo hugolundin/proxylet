@@ -160,7 +160,7 @@ class HTTPStream(StreamWrapper):
     def readline(self,size=None):
         #TODO: this ignores <size> and is therefore pointless
         try:
-          return self._lines.next()
+          return next(self._lines)
         except StopIteration:
           return ""
 
@@ -203,7 +203,7 @@ class HTTPRequest(HTTPStream):
         lines = HTTPStream._generateLines(self)
         # discard the original headline and build a new one,
         # in case our attributes have been modified
-        lines.next()
+        next(lines)
         yield " ".join((self.reqMethod,self.reqURI,self.reqProtocol)) + "\r\n"
         # send the rest of the stream
         for ln in lines:
@@ -243,7 +243,7 @@ class HTTPRewriter(StreamWrapper):
     def readline(self,size=None):
         #TODO: this ignores <size> and is therefore pointless
         try:
-          return self._lines.next()
+          return next(self._lines)
         except StopIteration:
           return ""
 
@@ -308,7 +308,7 @@ class XMLRewriter(StreamWrapper):
     def readline(self,size=None):
         #TODO: this ignores <size> and is therefore pointless
         try:
-          return self._lines.next()
+          return next(self._lines)
         except StopIteration:
           return ""
 
@@ -348,7 +348,7 @@ class XMLRewriter(StreamWrapper):
             except KeyError:
               pass
         # Write out the corresponding start tag
-        atts = ['%s="%s"' % (k,v) for (k,v) in attributes.iteritems()]
+        atts = ['%s="%s"' % (k,v) for (k,v) in attributes.items()]
         atts = [name] + atts
         self._output.append("<%s>" % (" ".join(atts),))
 
